@@ -1,0 +1,11 @@
+[package]
+name = "pdfexporter"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lachugin pinkyGoose Vladimir"]
+
+[dependencies]
+
+headless_chrome = "1.0.10"
+home = "0.5.9"
+log = "0.4.22"
