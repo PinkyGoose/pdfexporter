@@ -7,5 +7,10 @@ authors = ["Lachugin pinkyGoose Vladimir"]
 [dependencies]
 
 headless_chrome = "1.0.10"
-home = "0.5.9"
-log = "0.4.22"
+
+[build-dependencies]
+cbindgen = "0.26.0"
+
+[lib]
+name = "pdfexporter"
+crate-type = ["cdylib"]

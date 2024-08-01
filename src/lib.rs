@@ -1,13 +1,15 @@
+mod ext;
+
 use std::default::Default;
 use std::fs;
 use std::io::Write;
 use std::time::Duration;
 use headless_chrome::{Browser, LaunchOptions};
 const FILE_TEMPLATE: &str="file://";
+
 pub fn print_html_to_pdf(path_from: String,  path_to: String) -> i8 {
-    match get_bytes_for_html(path_from) {
+    match get_bytes_for_pdf(path_from) {
         Ok(bytes) => {
-            // let mut path_to = path_to;
             let really_path=
             if let Some(_ind) = path_to.find(FILE_TEMPLATE){
                 path_to.replace(FILE_TEMPLATE, "")
@@ -33,7 +35,8 @@ pub fn print_html_to_pdf(path_from: String,  path_to: String) -> i8 {
         Err(i) => {i}
     }
 }
-pub fn get_bytes_for_html(path_from: String)-> Result<Vec<u8>, i8>{
+#[no_mangle]
+pub fn get_bytes_for_pdf(path_from: String)-> Result<Vec<u8>, i8>{
     let browser = Browser::new(LaunchOptions{
         headless:true,
         idle_browser_timeout: Duration::from_secs(500000),
@@ -75,9 +78,11 @@ pub fn get_bytes_for_html(path_from: String)-> Result<Vec<u8>, i8>{
    }
 }
 
+
+
 #[cfg(test)]
 mod tests {
-    use crate::{get_bytes_for_html, print_html_to_pdf};
+    use crate::{get_bytes_for_pdf, print_html_to_pdf};
 
     #[test]
     fn print_html_when_path_contains_schema() {
@@ -91,7 +96,7 @@ mod tests {
     }
     #[test]
     fn get_bytes_when_path_contains_schema() {
-        let res = get_bytes_for_html("file:///home/pinkygoose/pizza.html".to_string());
+        let res = get_bytes_for_pdf("file:///home/pinkygoose/pizza.html".to_string());
         if let Err(res) =res {
             panic!("{}", format!("ERROR {res}"))
         }
@@ -101,7 +106,7 @@ mod tests {
     }
     #[test]
     fn get_bytes_when_path_does_not_contains_schema() {
-        let res = get_bytes_for_html("/home/pinkygoose/pizza.html".to_string());
+        let res = get_bytes_for_pdf("/home/pinkygoose/pizza.html".to_string());
         if let Err(res) =res {
             panic!("{}", format!("ERROR {res}"))
         }
