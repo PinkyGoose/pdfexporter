@@ -1,14 +1,18 @@
 mod ext;
 
 use std::default::Default;
+use std::ffi::c_void;
 use std::fs;
 use std::io::Write;
 use std::time::Duration;
 use headless_chrome::{Browser, LaunchOptions};
+use libc::c_int;
+
 const FILE_TEMPLATE: &str="file://";
 
-pub fn print_html_to_pdf(path_from: String,  path_to: String) -> i8 {
+pub fn print_html_to_pdf(path_from: String, path_to: String) -> i8 {
     match get_bytes_for_pdf(path_from) {
+
         Ok(bytes) => {
             let really_path=
             if let Some(_ind) = path_to.find(FILE_TEMPLATE){
@@ -86,12 +90,12 @@ mod tests {
 
     #[test]
     fn print_html_when_path_contains_schema() {
-        let res = print_html_to_pdf("file:///home/pinkygoose/pizza.html".to_string(),"file:///home/pinkygoose/result.pdf".to_string());
+        let res = print_html_to_pdf("file:///home/pinkygoose/pizza.html".to_string(), "file:///home/pinkygoose/result.pdf".to_string(), );
         assert_eq!(res, 0);
     }
     #[test]
     fn print_html_when_path_does_not_contains_schema() {
-        let res = print_html_to_pdf("/home/pinkygoose/pizza.html".to_string(),"/home/pinkygoose/result.pdf".to_string());
+        let res = print_html_to_pdf("/home/pinkygoose/pizza.html".to_string(), "/home/pinkygoose/result.pdf".to_string(), );
         assert_eq!(res, 0);
     }
     #[test]
